@@ -6,19 +6,20 @@
   <title>編集</title>
 </head>
 <body>
-<div class="header-contents">
+<div class="header-comments">
   <h2>編集</h2>
 </div>
-<div class="main-contents">
-  <form th:method="post" th:action="@{/update/{id}(id=${formModel.id})}" th:object="${formModel}">
+<div class="main-comments">
+  <form th:method="post" th:action="@{/updateComment/{id}(id=${formModel.id})}" th:object="${formModel}">
     <div class="form-area">
       <label>編集内容</label>
-      <textarea class="tweet-box" th:field="*{content}" size="20" maxlength="200" /></textarea><br/>
+      <textarea class="tweet-box" th:field="*{comment}" size="20" maxlength="200" /></textarea><br/>
+      <input type="hidden" name="reportId" th:value="${formModel.reportId}">
       <input type="submit" value="編集" />
     </div>
   </form>
 </div>
-<div class="footer-contents">
+<div class="footer-comments">
   <form action="/">
     <input type="submit" value="戻る" />
   </form>

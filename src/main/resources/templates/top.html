@@ -20,24 +20,39 @@
         <div class="text">
             投稿 : <span th:text="${content.content}"/>
         </div>
-        <form th:action="@{/delete/{id}(id=${content.id})}" th:method="delete">
+        <form th:action="@{/deleteContent/{id}(id=${content.id})}" th:method="delete">
             <button type="submit">削除</button>
         </form>
-        <form th:action="@{/edit/{id}(id=${content.id})}" th:method="get">
+        <form th:action="@{/editContent/{id}(id=${content.id})}" th:method="get">
             <button type="submit">編集</button>
         </form>
         <form method="post" action="/comment" th:object="${formModel}">
             <div class="form-area">
-                <label>コメント</label>
-                <input type="hidden" name="report_id" th:value="${content.id}">
+                <label>返信</label>
+                <input type="hidden" name="reportId" th:value="${content.id}">
                 <textarea name="comment" class="tweet-box" size="20" maxlength="200" /></textarea><br/>
                 <input type="submit" value="返信" />
             </div>
         </form>
 
-<!--        <div class="comment" th:each="comment : ${comments}">-->
-<!--            <c:if test="${comment.messageId == message.id }">-->
-<!--        </div>-->
+        <div class="comments" th:each="comment : ${comments}">
+            <th:block th:if="${comment.reportId} == ${content.id}">
+                <div class="text">
+                    コメント : <span th:text="${comment.comment}"/>
+                </div>
+                <div class="delete-button">
+                    <form th:action="@{/deleteComment/{id}(id=${comment.id})}" th:method="delete">
+                        <input type="submit" value="削除">
+                    </form>
+                </div>
+                <div class="edit-button">
+                    <form th:action="@{/editComment/{id}(id=${comment.id})}" th:method="get">
+                        <button type="submit">編集</button>
+                    </form>
+                </div>
+
+            </th:block>
+        </div>
     </div>
 </div>
 </body>

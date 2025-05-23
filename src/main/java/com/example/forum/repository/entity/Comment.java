@@ -16,7 +16,7 @@ public class Comment {
     private int id;
 
     @Column
-    private String content;
+    private String comment;
 
     @Column
     private int reportId;
@@ -29,12 +29,12 @@ public class Comment {
         return id;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
-    public String getContent() {
-        return content;
+    public String getComment() {
+        return comment;
     }
 
     public  int getReportId(){
