@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:form="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/css/style.css}" rel="styleSheet">
+    <title>TOP</title>
+</head>
+<body>
+<div class="header-contents">
+    <h1>匿名掲示板</h1>
+</div>
+<div class="main-contents">
+    <a href="/new">
+        <button class="new-button" type="button">新規投稿</button>
+    </a>
+    <div class="message-icon" th:each="content : ${contents}">
+        <div>
+            ID : <span th:text="${content.id}"/>
+        </div>
+        <div class="text">
+            投稿 : <span th:text="${content.content}"/>
+        </div>
+        <form th:action="@{/delete/{id}(id=${content.id})}" th:method="delete">
+            <button type="submit">削除</button>
+        </form>
+        <form th:action="@{/edit/{id}(id=${content.id})}" th:method="get">
+            <button type="submit">編集</button>
+        </form>
+        <form method="post" action="/comment" th:object="${formModel}">
+            <div class="form-area">
+                <label>コメント</label>
+                <input type="hidden" name="report_id" th:value="${content.id}">
+                <textarea name="comment" class="tweet-box" size="20" maxlength="200" /></textarea><br/>
+                <input type="submit" value="返信" />
+            </div>
+        </form>
+
+<!--        <div class="comment" th:each="comment : ${comments}">-->
+<!--            <c:if test="${comment.messageId == message.id }">-->
+<!--        </div>-->
+    </div>
+</div>
+</body>
+</html>
