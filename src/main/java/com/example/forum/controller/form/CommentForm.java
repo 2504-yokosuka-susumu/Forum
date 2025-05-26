@@ -1,10 +1,14 @@
 package com.example.forum.controller.form;
 
+import java.util.Date;
+
 public class CommentForm {
 
     private int id;
     private String comment;
     private int reportId;
+    private Date createdDate;
+    private Date updatedDate;
 
     public void setId(int id) {
         this.id = id;
@@ -28,5 +32,21 @@ public class CommentForm {
 
     public void setReportId(int reportId) {
         this.reportId = reportId;
+    }
+
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public Date getUpdatedDate() {
+        return updatedDate;
+    }
+
+    public void setUpdatedDate(Date updatedDate) {
+        this.updatedDate = updatedDate;
     }
 }

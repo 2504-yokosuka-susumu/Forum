@@ -6,9 +6,11 @@ import com.example.forum.repository.entity.Report;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ReportService {
@@ -19,10 +21,25 @@ public class ReportService {
      * レコード全件取得処理
      */
     public List<ReportForm> findAllReport() {
-        List<Report> results = reportRepository.findAllByOrderByIdDesc();
+        List<Report> results = reportRepository.findAllByOrderByUpdatedDateDesc();
         List<ReportForm> reports = setReportForm(results);
         return reports;
     }
+
+    /*
+     * レコード日付取得処理
+     */
+    public List<ReportForm> findDateReport(String startTime, String endTime) throws ParseException {
+        // Date型に変換
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date startDate = sdf.parse(startTime);
+        Date endDate = sdf.parse(endTime);
+
+        List<Report> results = reportRepository.findByUpdatedDateBetweenOrderByUpdatedDateDesc(startDate, endDate);
+        List<ReportForm> reports = setReportForm(results);
+        return reports;
+    }
+
     /*
      * DBから取得したデータをFormに設定
      */
@@ -34,6 +51,8 @@ public class ReportService {
             Report result = results.get(i);
             report.setId(result.getId());
             report.setContent(result.getContent());
+            report.setCreatedDate(result.getCreatedDate());
+            report.setUpdatedDate(result.getUpdatedDate());
             reports.add(report);
         }
         return reports;
@@ -44,6 +63,11 @@ public class ReportService {
      */
     public void saveReport(ReportForm reqReport) {
         Report saveReport = setReportEntity(reqReport);
+        // update処理時日付更新
+        if(saveReport.getId() != 0){
+            Date date = new Date();
+            saveReport.setUpdatedDate(date);
+        }
         reportRepository.save(saveReport);
     }
 
@@ -72,6 +96,8 @@ public class ReportService {
         Report report = new Report();
         report.setId(reqReport.getId());
         report.setContent(reqReport.getContent());
+        report.setCreatedDate(reqReport.getCreatedDate());
+        report.setUpdatedDate(reqReport.getUpdatedDate());
         return report;
     }
 }

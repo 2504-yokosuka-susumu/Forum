@@ -4,12 +4,15 @@ import com.example.forum.controller.form.CommentForm;
 import com.example.forum.controller.form.ReportForm;
 import com.example.forum.service.CommentService;
 import com.example.forum.service.ReportService;
+import io.micrometer.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 @Controller
@@ -26,9 +29,48 @@ public class ForumController {
     @GetMapping
     public ModelAndView top() {
         ModelAndView mav = new ModelAndView();
+
         // 投稿を全件取得
         List<ReportForm> contentData = reportService.findAllReport();
         List<CommentForm> commentData = commentService.findAllComment();
+
+        // 画面遷移先を指定
+        mav.setViewName("/top");
+        // 投稿データオブジェクトを保管
+        mav.addObject("contents", contentData);
+        mav.addObject("comments", commentData);
+        return mav;
+    }
+
+    /*
+     * 新規投稿画面表示
+     */
+    @GetMapping("/search")
+    public ModelAndView search(@RequestParam(name = "startTime")String startTime, @RequestParam(name = "endTime")String endTime) throws ParseException {
+        ModelAndView mav = new ModelAndView();
+        List<ReportForm> contentData = null;
+        List<CommentForm> commentData = null;
+
+        String start;
+        String end;
+
+        if (StringUtils.isNotBlank(startTime)) {
+            start = startTime + " 00:00:00";
+        } else {
+            start = "2020-01-01 00:00:00";
+        }
+        if (StringUtils.isNotBlank(endTime)) {
+           end = endTime + " 23:59:59";
+        } else {
+            Calendar cl = Calendar.getInstance();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            end = String.valueOf(sdf.format(cl.getTime()));
+        }
+
+        // 投稿を取得
+        contentData = reportService.findDateReport(start, end);
+        commentData = commentService.findDateComment(start, end);
+
         // 画面遷移先を指定
         mav.setViewName("/top");
         // 投稿データオブジェクトを保管
@@ -114,7 +156,7 @@ public class ForumController {
      */
     @PostMapping("/updateContent/{id}")
     public ModelAndView updateContent(@PathVariable Integer id,
-            @ModelAttribute("formModel") ReportForm reportForm){
+            @ModelAttribute("formModel") ReportForm reportForm) {
         reportForm.setId(id);
         // 投稿をテーブルに格納
         reportService.saveReport(reportForm);

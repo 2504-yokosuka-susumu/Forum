@@ -6,7 +6,10 @@ import com.example.forum.repository.entity.Comment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -18,7 +21,21 @@ public class CommentService {
      * レコード全件取得処理
      */
     public List<CommentForm> findAllComment() {
-        List<Comment> results = commentRepository.findAllByOrderByIdDesc();
+        List<Comment> results = commentRepository.findAllByOrderByUpdatedDateDesc();
+        List<CommentForm> comments = setCommentForm(results);
+        return comments;
+    }
+
+    /*
+     * レコード日付取得処理
+     */
+    public List<CommentForm> findDateComment(String startTime, String endTime) throws ParseException {
+        // Date型に変換
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date startDate = sdf.parse(startTime);
+        Date endDate = sdf.parse(endTime);
+
+        List<Comment> results = commentRepository.findByUpdatedDateBetweenOrderByUpdatedDateDesc(startDate, endDate);
         List<CommentForm> comments = setCommentForm(results);
         return comments;
     }
@@ -35,6 +52,8 @@ public class CommentService {
             comment.setId(result.getId());
             comment.setComment(result.getComment());
             comment.setReportId(result.getReportId());
+            comment.setCreatedDate(result.getCreatedDate());
+            comment.setUpdatedDate(result.getUpdatedDate());
             comments.add(comment);
         }
         return comments;
@@ -43,8 +62,13 @@ public class CommentService {
     /*
      * レコード追加
      */
-    public void saveComment(CommentForm reqReport) {
-        Comment saveComment = setCommentEntity(reqReport);
+    public void saveComment(CommentForm reqComment) {
+        Comment saveComment = setCommentEntity(reqComment);
+        // update処理時日付更新
+        if(saveComment.getId() != 0){
+            Date date = new Date();
+            saveComment.setUpdatedDate(date);
+        }
         commentRepository.save(saveComment);
     }
 
@@ -74,6 +98,8 @@ public class CommentService {
         comment.setId(reqComment.getId());
         comment.setComment(reqComment.getComment());
         comment.setReportId(reqComment.getReportId());
+        comment.setCreatedDate(reqComment.getCreatedDate());
+        comment.setUpdatedDate(reqComment.getUpdatedDate());
         return comment;
     }
 }
