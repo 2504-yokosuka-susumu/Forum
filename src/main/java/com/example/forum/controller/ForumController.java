@@ -36,7 +36,7 @@ public class ForumController {
      * 投稿内容表示処理
      */
     @GetMapping
-    public ModelAndView top() {
+    public ModelAndView top(@ModelAttribute("errorMessages") List<String> errorMessages, @ModelAttribute("errorId") CommentForm errorId) {
         ModelAndView mav = new ModelAndView();
 
         // 投稿を全件取得
@@ -45,15 +45,9 @@ public class ForumController {
 
         CommentForm commentForm = new CommentForm();
 
-        // セッションを取得
-        Object errorMessages = session.getAttribute("errorMessages");
-        Object errorId = session.getAttribute("errorId");
         // セッションよりデータを取得して設定
         mav.addObject("errorMessages", errorMessages);
-        mav.addObject("errorId", errorId);
-        // セッション削除
-        session.removeAttribute("errorMessages");
-        session.removeAttribute("errorId");
+        mav.addObject("errorId", errorId.getReportId());
 
         // 画面遷移先を指定
         mav.setViewName("/top");
@@ -206,19 +200,18 @@ public class ForumController {
      */
     @PostMapping("/comment")
     public ModelAndView commentContent(@ModelAttribute("formModel") @Valid CommentForm commentForm,
-                                       BindingResult result, ModelAndView mav){
+                                       BindingResult result, ModelAndView mav, RedirectAttributes redirectAttributes){
 
         if(result.hasErrors()) {
 
             List<String> errorList = new ArrayList<String>();
-            Integer reportId = commentForm.getReportId();
 
             for (ObjectError error: result.getAllErrors()) {
                 errorList.add(error.getDefaultMessage());
             }
 
-            session.setAttribute("errorMessages", errorList);
-            session.setAttribute("errorId", reportId);
+            redirectAttributes.addFlashAttribute("errorMessages", errorList);
+            redirectAttributes.addFlashAttribute("errorId", commentForm);
 
             mav.setViewName("redirect:/");
             return mav;
