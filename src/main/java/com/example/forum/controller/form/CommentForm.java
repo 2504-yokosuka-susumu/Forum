@@ -13,6 +13,7 @@ public class CommentForm {
 
     private int id;
     @NotBlank(message="コメントを入力してください")
+    @Size(min=10, max= 100)
     private String comment;
     private int reportId;
     private Date createdDate;

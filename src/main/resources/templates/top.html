@@ -41,7 +41,7 @@
             <div class="form-area">
                 <if th:if ="${errorId == content.id}">
                     <div class="errorMessages" th:each="errorMessage : ${errorMessages}">
-                        <span th:text="${errorMessages}"/>
+                        <span th:text="${errorMessage}"/>
                     </div>
                 </if>
                 <label>返信</label>
