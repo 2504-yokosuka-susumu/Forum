@@ -1,52 +1,20 @@
 package com.example.forum.controller.form;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.Date;
 
+@Getter
+@Setter
 public class CommentForm {
 
     private int id;
+    @NotBlank(message="コメントを入力してください")
     private String comment;
     private int reportId;
     private Date createdDate;
     private Date updatedDate;
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
-
-    public String getComment() {
-        return comment;
-    }
-
-    public  int getReportId(){
-        return reportId;
-    }
-
-    public void setReportId(int reportId) {
-        this.reportId = reportId;
-    }
-
-    public Date getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public Date getUpdatedDate() {
-        return updatedDate;
-    }
-
-    public void setUpdatedDate(Date updatedDate) {
-        this.updatedDate = updatedDate;
-    }
 }

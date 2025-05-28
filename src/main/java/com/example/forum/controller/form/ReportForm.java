@@ -1,43 +1,20 @@
 package com.example.forum.controller.form;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.Date;
 
+@Getter
+@Setter
 public class ReportForm {
 
-    private int id;
+    @NotBlank(message="投稿内容を入力してください")
+    @Size(min=10, max= 100)
     private String content;
+    private int id;
     private Date createdDate;
     private Date updatedDate;
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public Date getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setUpdatedDate(Date updatedDate) {
-        this.updatedDate = updatedDate;
-    }
-
-    public Date getUpdatedDate() {
-        return updatedDate;
-    }
 }

@@ -64,11 +64,6 @@ public class CommentService {
      */
     public void saveComment(CommentForm reqComment) {
         Comment saveComment = setCommentEntity(reqComment);
-        // update処理時日付更新
-        if(saveComment.getId() != 0){
-            Date date = new Date();
-            saveComment.setUpdatedDate(date);
-        }
         commentRepository.save(saveComment);
     }
 
@@ -99,7 +94,7 @@ public class CommentService {
         comment.setComment(reqComment.getComment());
         comment.setReportId(reqComment.getReportId());
         comment.setCreatedDate(reqComment.getCreatedDate());
-        comment.setUpdatedDate(reqComment.getUpdatedDate());
+        comment.setUpdatedDate(new Date());
         return comment;
     }
 }

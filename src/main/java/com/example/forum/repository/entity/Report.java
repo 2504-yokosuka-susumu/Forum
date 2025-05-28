@@ -1,6 +1,8 @@
 package com.example.forum.repository.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.Date;
@@ -8,6 +10,8 @@ import java.util.Date;
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "report")
+@Getter
+@Setter
 public class Report {
     @Id
     @Column
@@ -22,36 +26,4 @@ public class Report {
 
     @Column(name = "updated_date", insertable = false, updatable = true)
     private Date updatedDate;
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public Date getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setUpdatedDate(Date updatedDate) {
-        this.updatedDate = updatedDate;
-    }
-
-    public Date getUpdatedDate() {
-        return updatedDate;
-    }
 }

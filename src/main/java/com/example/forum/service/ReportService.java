@@ -63,11 +63,6 @@ public class ReportService {
      */
     public void saveReport(ReportForm reqReport) {
         Report saveReport = setReportEntity(reqReport);
-        // update処理時日付更新
-        if(saveReport.getId() != 0){
-            Date date = new Date();
-            saveReport.setUpdatedDate(date);
-        }
         reportRepository.save(saveReport);
     }
 
@@ -97,7 +92,7 @@ public class ReportService {
         report.setId(reqReport.getId());
         report.setContent(reqReport.getContent());
         report.setCreatedDate(reqReport.getCreatedDate());
-        report.setUpdatedDate(reqReport.getUpdatedDate());
+        report.setUpdatedDate(new Date());
         return report;
     }
 }

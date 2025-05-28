@@ -12,6 +12,7 @@
 <div class="main-comments">
   <form th:method="post" th:action="@{/updateComment/{id}(id=${formModel.id})}" th:object="${formModel}">
     <div class="form-area">
+      <div th:if="${#fields.hasErrors('comment')}" th:errors="*{comment}" style="color: red">Comment Error</div>
       <label>編集内容</label>
       <textarea class="tweet-box" th:field="*{comment}" size="20" maxlength="200" /></textarea><br/>
       <input type="hidden" name="reportId" th:value="${formModel.reportId}">
